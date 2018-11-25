@@ -1,0 +1,32 @@
+{% extends "shop/base.html" %}
+{% load comments %}
+{% load static %}
+
+{% block title %}
+  {{ product.name }}
+{% endblock %}
+
+{% block content %}
+
+<link href="{% static "css/base2.css" %}" rel="stylesheet">
+  <div class="product-detail">
+    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+    <h1>{{ product.name }}</h1>
+    <h2><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
+    <p class="product-detail">{% if product.id == 1 %}{{games5}} {% elif product.id == 2 %} {{games4}} {% else %} {{games15}}{% endif %}</p>
+    <p class="product-detail">Publisher: {% if product.id == 1 %}{{comp2}} {% elif product.id == 2 %} {{comp3}} {% else %} {{comp1}}{% endif %}</p>
+    <p class="product-detail">Release Date: {% if product.id == 1 %} July 25, 2017 {% elif product.id == 2 %} May 24, 2016 {% else %} March 3, 2017 {% endif %}</p>
+    <p class="price">${{ product.price }}</p>
+    <form action="{% url "cart:cart_add" product.id %}" method="post">
+      {{ cart_product_form }}
+      {% csrf_token %}
+      <input type="submit" value="Add to cart">
+    </form>
+    {{ product.description|linebreaks }}
+  </div>
+
+{% render_comment_form for product %}
+{% render_comment_list for product %}
+
+
+{% endblock %}
